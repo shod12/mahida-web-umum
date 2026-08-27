@@ -11,7 +11,21 @@ const MAHIDA_PUBLIC_STORAGE = {
 };
 
 const SPLASH_DURATION_MS = 1400;
+const MAHIDA_PUBLIC_API_URL =
+  'https://script.google.com/macros/s/AKfycbxhZ3pheGsa1Y5asHnBqIe99sQMDUdPKsICJSHaqHB3cj51FJY4tmmAUTsTju22Zssi9g/exec';
 
+
+const STOCK_REFRESH_INTERVAL_MS =
+  15000;
+
+
+let stockItems_ = [];
+
+let stockRefreshTimer_ =
+  null;
+
+let stockRequestRunning_ =
+  false;
 
 /* =========================================================
    ELEMENT
@@ -57,6 +71,51 @@ const homeMenu =
     'homeMenu'
   );
 
+const stockScreen =
+  document.getElementById(
+    'stockScreen'
+  );
+
+const stockBackButton =
+  document.getElementById(
+    'stockBackButton'
+  );
+
+const stockRefreshButton =
+  document.getElementById(
+    'stockRefreshButton'
+  );
+
+const stockUpdatedAt =
+  document.getElementById(
+    'stockUpdatedAt'
+  );
+
+const stockSearchInput =
+  document.getElementById(
+    'stockSearchInput'
+  );
+
+const stockLoading =
+  document.getElementById(
+    'stockLoading'
+  );
+
+const stockError =
+  document.getElementById(
+    'stockError'
+  );
+
+const stockEmpty =
+  document.getElementById(
+    'stockEmpty'
+  );
+
+const stockList =
+  document.getElementById(
+    'stockList'
+  );
+
 
 /* =========================================================
    INIT
@@ -99,6 +158,10 @@ function hideAllScreens_() {
   homeScreen
     ?.classList
     .add('hidden');
+
+   stockScreen
+  ?.classList
+  .add('hidden');
 }
 
 
@@ -514,18 +577,22 @@ function renderHomeMenu_() {
 }
 
 
-/* =========================================================
-   MENU SEMENTARA
-   ========================================================= */
-
 function handleMenuClick_(
   menu
 ) {
 
-  const labels = {
-    stock:
-      'Persediaan',
+  if (
+    menu ===
+    'stock'
+  ) {
 
+    showStockScreen_();
+
+    return;
+  }
+
+
+  const labels = {
     scan:
       'Scan Santri',
 
@@ -541,4 +608,614 @@ function handleMenuClick_(
     label +
     ' bakal diaktifake ing tahap sabanjure.'
   );
+}
+
+/* =========================================================
+   PERSEDIAAN
+   ========================================================= */
+
+function showStockScreen_() {
+
+  hideAllScreens_();
+
+  stockScreen
+    ?.classList
+    .remove('hidden');
+
+  window.scrollTo(
+    {
+      top: 0,
+      behavior: 'auto'
+    }
+  );
+
+  loadPublicStock_();
+
+  startStockAutoRefresh_();
+}
+
+
+function leaveStockScreen_() {
+
+  stopStockAutoRefresh_();
+
+  const email =
+    normalizeEmail_(
+      userEmailInput?.value
+    );
+
+  showHomeScreen_(
+    email
+  );
+}
+
+
+stockBackButton
+  ?.addEventListener(
+    'click',
+    leaveStockScreen_
+  );
+
+
+stockRefreshButton
+  ?.addEventListener(
+    'click',
+    function () {
+
+      loadPublicStock_(
+        true
+      );
+    }
+  );
+
+
+stockSearchInput
+  ?.addEventListener(
+    'input',
+    function () {
+
+      renderStockItems_();
+    }
+  );
+
+
+function startStockAutoRefresh_() {
+
+  stopStockAutoRefresh_();
+
+  stockRefreshTimer_ =
+    window.setInterval(
+      function () {
+
+        if (
+          !stockScreen
+            ?.classList
+            .contains(
+              'hidden'
+            )
+        ) {
+
+          loadPublicStock_(
+            false
+          );
+        }
+
+      },
+      STOCK_REFRESH_INTERVAL_MS
+    );
+}
+
+
+function stopStockAutoRefresh_() {
+
+  if (
+    stockRefreshTimer_
+  ) {
+
+    window.clearInterval(
+      stockRefreshTimer_
+    );
+
+    stockRefreshTimer_ =
+      null;
+  }
+}
+
+
+async function loadPublicStock_(
+  manualRefresh = false
+) {
+
+  if (
+    stockRequestRunning_
+  ) {
+    return;
+  }
+
+  stockRequestRunning_ =
+    true;
+
+  setStockLoading_(
+    true,
+    manualRefresh
+  );
+
+  clearStockError_();
+
+  try {
+
+    /*
+     * Content-Type text/plain sengaja dipakai.
+     *
+     * Ini membuat request dari GitHub Pages
+     * tetap sederhana dan tidak membutuhkan
+     * preflight CORS khusus.
+     */
+    const response =
+      await fetch(
+        MAHIDA_PUBLIC_API_URL,
+        {
+          method:
+            'POST',
+
+          headers: {
+            'Content-Type':
+              'text/plain;charset=UTF-8'
+          },
+
+          body:
+            JSON.stringify(
+              {
+                action:
+                  'public.stock.list'
+              }
+            )
+        }
+      );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        'Server Mahida tidak dapat dihubungi.'
+      );
+    }
+
+
+    const payload =
+      await response.json();
+
+
+    if (
+      payload.ok !==
+      true
+    ) {
+
+      throw new Error(
+        payload?.error?.message ||
+        'Data persediaan belum dapat dimuat.'
+      );
+    }
+
+
+    const data =
+      payload.data || {};
+
+
+    stockItems_ =
+      Array.isArray(
+        data.items
+      )
+        ? data.items
+        : [];
+
+
+    updateStockTimestamp_(
+      data.updatedAt
+    );
+
+
+    renderStockItems_();
+
+  } catch (error) {
+
+    showStockError_(
+      error?.message ||
+      'Gagal memuat persediaan.'
+    );
+
+  } finally {
+
+    stockRequestRunning_ =
+      false;
+
+    setStockLoading_(
+      false,
+      manualRefresh
+    );
+  }
+}
+
+
+function renderStockItems_() {
+
+  if (
+    !stockList
+  ) {
+    return;
+  }
+
+
+  const query =
+    String(
+      stockSearchInput?.value ||
+      ''
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const filtered =
+    stockItems_
+      .filter(
+        function (
+          item
+        ) {
+
+          if (
+            !query
+          ) {
+            return true;
+          }
+
+
+          const haystack =
+            (
+              String(
+                item.name ||
+                ''
+              ) +
+              ' ' +
+              String(
+                item.code ||
+                ''
+              )
+            )
+              .toLowerCase();
+
+
+          return (
+            haystack.indexOf(
+              query
+            ) !== -1
+          );
+        }
+      );
+
+
+  if (
+    stockEmpty
+  ) {
+
+    stockEmpty
+      .classList
+      .toggle(
+        'hidden',
+        filtered.length !== 0
+      );
+  }
+
+
+  stockList.innerHTML =
+    filtered
+      .map(
+        function (
+          item
+        ) {
+
+          const stock =
+            Math.max(
+              0,
+              Number(
+                item.stock
+              ) || 0
+            );
+
+
+          const studentPrice =
+            Math.max(
+              0,
+              Number(
+                item.studentPrice
+              ) || 0
+            );
+
+
+          return `
+            <article
+              class="stock-card"
+            >
+
+              <h3
+                class="stock-card-name"
+              >
+                ${escapeHtml_(
+                  item.name
+                )}
+              </h3>
+
+              <p
+                class="stock-card-code"
+              >
+                ${escapeHtml_(
+                  item.code
+                )}
+              </p>
+
+
+              <div
+                class="stock-card-info"
+              >
+
+                <div
+                  class="stock-info-box"
+                >
+
+                  <span
+                    class="stock-info-label"
+                  >
+                    Stok tersedia
+                  </span>
+
+                  <strong
+                    class="
+                      stock-info-value
+                      ${
+                        stock <= 0
+                          ? 'out'
+                          : ''
+                      }
+                    "
+                  >
+                    ${
+                      formatNumberId_(
+                        stock
+                      )
+                    }
+                  </strong>
+
+                </div>
+
+
+                <div
+                  class="stock-info-box"
+                >
+
+                  <span
+                    class="stock-info-label"
+                  >
+                    Harga Santri
+                  </span>
+
+                  <strong
+                    class="stock-info-value"
+                  >
+                    ${
+                      formatRupiah_(
+                        studentPrice
+                      )
+                    }
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </article>
+          `;
+        }
+      )
+      .join('');
+}
+
+
+function setStockLoading_(
+  loading,
+  manualRefresh
+) {
+
+  if (
+    stockLoading
+  ) {
+
+    stockLoading
+      .classList
+      .toggle(
+        'hidden',
+        !loading ||
+        stockItems_.length > 0
+      );
+  }
+
+
+  if (
+    stockRefreshButton
+  ) {
+
+    stockRefreshButton
+      .classList
+      .toggle(
+        'is-loading',
+        loading
+      );
+
+    stockRefreshButton.disabled =
+      loading;
+  }
+}
+
+
+function updateStockTimestamp_(
+  value
+) {
+
+  if (
+    !stockUpdatedAt
+  ) {
+    return;
+  }
+
+
+  const date =
+    value
+      ? new Date(
+          value
+        )
+      : new Date();
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    stockUpdatedAt.textContent =
+      '-';
+
+    return;
+  }
+
+
+  stockUpdatedAt.textContent =
+    new Intl
+      .DateTimeFormat(
+        'id-ID',
+        {
+          hour:
+            '2-digit',
+
+          minute:
+            '2-digit',
+
+          second:
+            '2-digit'
+        }
+      )
+      .format(
+        date
+      );
+}
+
+
+function showStockError_(
+  message
+) {
+
+  if (
+    !stockError
+  ) {
+    return;
+  }
+
+
+  stockError.textContent =
+    String(
+      message || ''
+    );
+
+
+  stockError
+    .classList
+    .remove(
+      'hidden'
+    );
+}
+
+
+function clearStockError_() {
+
+  if (
+    !stockError
+  ) {
+    return;
+  }
+
+
+  stockError.textContent =
+    '';
+
+
+  stockError
+    .classList
+    .add(
+      'hidden'
+    );
+}
+
+
+function formatRupiah_(
+  value
+) {
+
+  return (
+    'Rp' +
+    new Intl
+      .NumberFormat(
+        'id-ID'
+      )
+      .format(
+        Number(
+          value
+        ) || 0
+      )
+  );
+}
+
+
+function formatNumberId_(
+  value
+) {
+
+  return new Intl
+    .NumberFormat(
+      'id-ID'
+    )
+    .format(
+      Number(
+        value
+      ) || 0
+    );
+}
+
+
+function escapeHtml_(
+  value
+) {
+
+  return String(
+    value || ''
+  )
+    .replace(
+      /&/g,
+      '&amp;'
+    )
+    .replace(
+      /</g,
+      '&lt;'
+    )
+    .replace(
+      />/g,
+      '&gt;'
+    )
+    .replace(
+      /"/g,
+      '&quot;'
+    )
+    .replace(
+      /'/g,
+      '&#039;'
+    );
 }
