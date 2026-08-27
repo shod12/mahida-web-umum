@@ -173,6 +173,105 @@
 
   </main>
 
+  <!-- ==============================
+     HALAMAN PERSEDIAAN
+     ============================== -->
+<main
+  id="stockScreen"
+  class="screen stock-screen hidden"
+>
+
+  <header class="page-header">
+
+    <button
+      id="stockBackButton"
+      class="page-back-button"
+      type="button"
+      aria-label="Kembali"
+    >
+      ←
+    </button>
+
+    <div class="page-header-copy">
+      <h1>Persediaan</h1>
+
+      <p>
+        Stok lan rega santri saiki
+      </p>
+    </div>
+
+    <button
+      id="stockRefreshButton"
+      class="page-refresh-button"
+      type="button"
+    >
+      ↻
+    </button>
+
+  </header>
+
+
+  <section class="stock-content">
+
+    <div class="stock-update-row">
+
+      <span>
+        Diperbarui
+      </span>
+
+      <strong id="stockUpdatedAt">
+        -
+      </strong>
+
+    </div>
+
+
+    <div class="stock-search">
+
+      <span class="stock-search-icon">
+        🔎
+      </span>
+
+      <input
+        id="stockSearchInput"
+        type="search"
+        autocomplete="off"
+        placeholder="Cari kitab / barang..."
+      >
+
+    </div>
+
+
+    <div
+      id="stockLoading"
+      class="stock-state"
+    >
+      Memuat persediaan...
+    </div>
+
+
+    <div
+      id="stockError"
+      class="stock-state stock-state-error hidden"
+    ></div>
+
+
+    <div
+      id="stockEmpty"
+      class="stock-state hidden"
+    >
+      Barang tidak ditemukan.
+    </div>
+
+
+    <div
+      id="stockList"
+      class="stock-list"
+    ></div>
+
+  </section>
+
+</main>
 
   <script src="script.js"></script>
 
