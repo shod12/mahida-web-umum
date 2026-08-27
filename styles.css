@@ -678,6 +678,174 @@ button {
   gap: 14px;
 }
 
+/* =========================================================
+   HOME MENU CARD
+   ========================================================= */
+
+.home-menu-card {
+  width: 100%;
+  min-height: 96px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 18px;
+
+  border:
+    1px solid
+    var(--mahida-border);
+
+  border-radius:
+    var(--radius-md);
+
+  cursor: pointer;
+
+  text-align: left;
+
+  color:
+    var(--mahida-text);
+
+  background:
+    var(--mahida-card);
+
+  box-shadow:
+    var(--shadow-card);
+
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    border-color 0.14s ease;
+}
+
+
+.home-menu-card:active {
+  transform:
+    scale(0.985);
+
+  box-shadow:
+    0 4px 14px
+    rgba(15, 49, 73, 0.08);
+}
+
+
+.home-menu-card:hover {
+  border-color:
+    rgba(14, 116, 112, 0.38);
+}
+
+
+.home-menu-icon {
+  width: 52px;
+  height: 52px;
+
+  flex:
+    0 0
+    52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  font-size: 25px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(15, 82, 127, 0.10),
+      rgba(14, 116, 112, 0.13)
+    );
+}
+
+
+.home-menu-copy {
+  min-width: 0;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+
+.home-menu-copy strong {
+  color:
+    var(--mahida-navy);
+
+  font-size: 16px;
+  line-height: 1.25;
+
+  font-weight: 800;
+}
+
+
+.home-menu-copy small {
+  color:
+    var(--mahida-muted);
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+
+.home-menu-arrow {
+  flex:
+    0 0
+    auto;
+
+  color:
+    var(--mahida-muted);
+
+  font-size: 29px;
+  line-height: 1;
+
+  font-weight: 300;
+}
+
+
+/* Warna karakter tiap menu */
+
+.home-menu-card[
+  data-menu="stock"
+] .home-menu-icon {
+  background:
+    rgba(
+      14,
+      116,
+      112,
+      0.12
+    );
+}
+
+
+.home-menu-card[
+  data-menu="scan"
+] .home-menu-icon {
+  background:
+    rgba(
+      15,
+      82,
+      127,
+      0.12
+    );
+}
+
+
+.home-menu-card[
+  data-menu="sales"
+] .home-menu-icon {
+  background:
+    rgba(
+      15,
+      49,
+      73,
+      0.10
+    );
+}
 
 /* =========================================================
    ANIMATION
