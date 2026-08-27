@@ -12,7 +12,7 @@ const MAHIDA_PUBLIC_STORAGE = {
 
 const SPLASH_DURATION_MS = 1400;
 const MAHIDA_PUBLIC_API_URL =
-  'https://script.google.com/macros/s/AKfycbxhZ3pheGsa1Y5asHnBqIe99sQMDUdPKsICJSHaqHB3cj51FJY4tmmAUTsTju22Zssi9g/exec';
+  'https://script.google.com/macros/s/AKfycbzzm1txakGC5DQTidoQr3UdPNi4k9y8YDn9UNokKXhmJ6Lj9xyPseKd2kaJ2nL_qU2KEw/exec';
 
 
 const STOCK_REFRESH_INTERVAL_MS =
