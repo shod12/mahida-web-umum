@@ -1,0 +1,854 @@
+/* =========================================================
+   MAHIDA WEB UMUM
+   Mobile First UI
+   ========================================================= */
+
+:root {
+  --mahida-navy: #0f3149;
+  --mahida-blue: #0f527f;
+  --mahida-teal: #0e7470;
+
+  --mahida-bg: #f4f7fa;
+  --mahida-card: #ffffff;
+
+  --mahida-text: #1f2937;
+  --mahida-muted: #64748b;
+
+  --mahida-border: #dbe4ec;
+
+  --mahida-success: #166534;
+  --mahida-warning: #92400e;
+  --mahida-danger: #991b1b;
+
+  --shadow-soft:
+    0 14px 35px
+    rgba(15, 49, 73, 0.10);
+
+  --shadow-card:
+    0 8px 24px
+    rgba(15, 49, 73, 0.08);
+
+  --radius-lg: 26px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+html {
+  background: var(--mahida-bg);
+}
+
+body {
+  min-height: 100vh;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+  color: var(--mahida-text);
+  background: var(--mahida-bg);
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   SCREEN
+   ========================================================= */
+
+.screen {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+/* =========================================================
+   SPLASH SCREEN
+   ========================================================= */
+
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    max(32px, env(safe-area-inset-top))
+    24px
+    max(32px, env(safe-area-inset-bottom));
+
+  overflow: hidden;
+
+  color: #ffffff;
+
+  background:
+    radial-gradient(
+      circle at 20% 15%,
+      rgba(255, 255, 255, 0.10),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(14, 116, 112, 0.45),
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      #0f3149 0%,
+      #0d4567 52%,
+      #0e7470 100%
+    );
+}
+
+.splash-screen::before {
+  content: "";
+
+  position: absolute;
+  width: 260px;
+  height: 260px;
+
+  top: -110px;
+  right: -120px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.09);
+}
+
+.splash-screen::after {
+  content: "";
+
+  position: absolute;
+  width: 210px;
+  height: 210px;
+
+  bottom: -105px;
+  left: -95px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+}
+
+.splash-logo-group {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  opacity: 0;
+
+  animation:
+    splashLogoEnter
+    0.75s
+    ease
+    forwards;
+}
+
+.logo-placeholder {
+  width: 92px;
+  height: 92px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px;
+
+  border-radius: 24px;
+
+  text-align: center;
+
+  font-size: 10px;
+  line-height: 1.25;
+  font-weight: 800;
+
+  color: var(--mahida-navy);
+
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  box-shadow:
+    0 16px 35px
+    rgba(0, 0, 0, 0.15);
+}
+
+.logo-pondok {
+  animation:
+    logoFloat
+    3.2s
+    ease-in-out
+    infinite;
+}
+
+.logo-koperasi {
+  animation:
+    logoFloat
+    3.2s
+    ease-in-out
+    0.35s
+    infinite;
+}
+
+.logo-divider {
+  font-size: 22px;
+  font-weight: 300;
+
+  color:
+    rgba(255, 255, 255, 0.65);
+}
+
+.splash-brand {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+
+  margin-top: 30px;
+
+  text-align: center;
+
+  opacity: 0;
+
+  animation:
+    splashBrandEnter
+    0.65s
+    ease
+    0.35s
+    forwards;
+}
+
+.splash-brand h1 {
+  margin: 0;
+
+  font-size: clamp(
+    27px,
+    7vw,
+    36px
+  );
+
+  line-height: 1.1;
+
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.splash-brand p {
+  margin:
+    10px auto
+    0;
+
+  max-width: 280px;
+
+  font-size: 14px;
+  line-height: 1.6;
+
+  color:
+    rgba(255, 255, 255, 0.76);
+}
+
+.splash-loading {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  margin-top: 30px;
+
+  opacity: 0;
+
+  animation:
+    splashLoaderEnter
+    0.4s
+    ease
+    0.75s
+    forwards;
+}
+
+.splash-loading span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  animation:
+    loadingDot
+    1.15s
+    ease-in-out
+    infinite;
+}
+
+.splash-loading span:nth-child(2) {
+  animation-delay: 0.14s;
+}
+
+.splash-loading span:nth-child(3) {
+  animation-delay: 0.28s;
+}
+
+
+/* =========================================================
+   WELCOME SCREEN
+   ========================================================= */
+
+.welcome-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+
+  padding:
+    max(26px, env(safe-area-inset-top))
+    18px
+    max(26px, env(safe-area-inset-bottom));
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(14, 116, 112, 0.08),
+      transparent 32%
+    ),
+    var(--mahida-bg);
+}
+
+.welcome-card {
+  width: 100%;
+  max-width: 440px;
+
+  padding: 30px 24px 24px;
+
+  border:
+    1px solid
+    rgba(219, 228, 236, 0.85);
+
+  border-radius: var(--radius-lg);
+
+  background:
+    rgba(255, 255, 255, 0.98);
+
+  box-shadow:
+    var(--shadow-soft);
+
+  animation:
+    cardEnter
+    0.45s
+    ease
+    both;
+}
+
+.welcome-brand {
+  text-align: center;
+
+  margin-bottom: 30px;
+}
+
+.welcome-brand::before {
+  content: "";
+
+  display: block;
+
+  width: 48px;
+  height: 5px;
+
+  margin:
+    0 auto
+    22px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--mahida-blue),
+      var(--mahida-teal)
+    );
+}
+
+.welcome-brand h1 {
+  margin: 0;
+
+  color: var(--mahida-navy);
+
+  font-size: 28px;
+  line-height: 1.2;
+
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+
+.welcome-brand p {
+  margin:
+    10px
+    0
+    0;
+
+  color: var(--mahida-muted);
+
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.welcome-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.welcome-form label {
+  margin-left: 2px;
+
+  color: var(--mahida-text);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.welcome-form input {
+  width: 100%;
+  min-height: 54px;
+
+  padding:
+    0
+    16px;
+
+  border:
+    1.5px solid
+    var(--mahida-border);
+
+  border-radius: 15px;
+
+  outline: none;
+
+  color: var(--mahida-text);
+  background: #ffffff;
+
+  font-size: 16px;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.welcome-form input::placeholder {
+  color: #94a3b8;
+}
+
+.welcome-form input:focus {
+  border-color: var(--mahida-teal);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(14, 116, 112, 0.10);
+}
+
+.form-message {
+  min-height: 18px;
+
+  margin:
+    1px
+    2px
+    2px;
+
+  color: var(--mahida-danger);
+
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.welcome-form button {
+  width: 100%;
+  min-height: 54px;
+
+  border: 0;
+  border-radius: 15px;
+
+  cursor: pointer;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--mahida-blue),
+      var(--mahida-teal)
+    );
+
+  box-shadow:
+    0 10px 22px
+    rgba(15, 82, 127, 0.20);
+
+  font-size: 15px;
+  font-weight: 800;
+
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    opacity 0.12s ease;
+}
+
+.welcome-form button:active {
+  transform:
+    translateY(1px)
+    scale(0.995);
+
+  box-shadow:
+    0 5px 14px
+    rgba(15, 82, 127, 0.16);
+}
+
+.welcome-form button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.55;
+
+  box-shadow: none;
+}
+
+.welcome-note {
+  margin:
+    20px
+    auto
+    0;
+
+  max-width: 310px;
+
+  text-align: center;
+
+  color: var(--mahida-muted);
+
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   HOME
+   Struktur awal saja.
+   Menu akan ditambahkan nanti.
+   ========================================================= */
+
+.home-screen {
+  min-height: 100vh;
+
+  background:
+    var(--mahida-bg);
+}
+
+.home-header {
+  position: relative;
+
+  padding:
+    max(30px, env(safe-area-inset-top))
+    20px
+    26px;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--mahida-navy),
+      var(--mahida-blue)
+    );
+
+  border-radius:
+    0
+    0
+    28px
+    28px;
+
+  box-shadow:
+    0 10px 25px
+    rgba(15, 49, 73, 0.18);
+}
+
+.home-greeting {
+  margin: 0;
+
+  font-size: 13px;
+  line-height: 1.4;
+
+  color:
+    rgba(255, 255, 255, 0.76);
+}
+
+.home-email {
+  display: block;
+
+  margin-top: 4px;
+
+  overflow: hidden;
+
+  color: #ffffff;
+
+  font-size: 17px;
+  line-height: 1.4;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-content {
+  width: 100%;
+  max-width: 760px;
+
+  margin: 0 auto;
+
+  padding:
+    26px
+    18px
+    40px;
+}
+
+.home-content h2 {
+  margin:
+    0
+    0
+    18px;
+
+  color: var(--mahida-navy);
+
+  font-size: 21px;
+  line-height: 1.25;
+}
+
+.home-menu {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      1,
+      minmax(0, 1fr)
+    );
+
+  gap: 14px;
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes splashLogoEnter {
+  from {
+    opacity: 0;
+    transform:
+      translateY(18px)
+      scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+@keyframes splashBrandEnter {
+  from {
+    opacity: 0;
+    transform:
+      translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateY(0);
+  }
+}
+
+@keyframes splashLoaderEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes logoFloat {
+  0%,
+  100% {
+    transform:
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      translateY(-5px);
+  }
+}
+
+@keyframes loadingDot {
+  0%,
+  100% {
+    opacity: 0.35;
+
+    transform:
+      translateY(0)
+      scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform:
+      translateY(-4px)
+      scale(1);
+  }
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(16px)
+      scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =========================================================
+   TABLET / DESKTOP
+   Web tetap mobile-first
+   ========================================================= */
+
+@media (
+  min-width: 640px
+) {
+
+  .splash-logo-group {
+    gap: 18px;
+  }
+
+  .logo-placeholder {
+    width: 104px;
+    height: 104px;
+
+    border-radius: 28px;
+  }
+
+  .welcome-card {
+    padding:
+      36px
+      34px
+      30px;
+  }
+
+  .home-header {
+    padding-left:
+      max(
+        28px,
+        calc(
+          (100% - 720px) / 2
+        )
+      );
+
+    padding-right:
+      max(
+        28px,
+        calc(
+          (100% - 720px) / 2
+        )
+      );
+  }
+
+  .home-menu {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}
