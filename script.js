@@ -4,7 +4,7 @@
    MAHIDA WEB UMUM V2 FINAL
    ========================================================= */
 
-const MAHIDA_PUBLIC_APP_VERSION = 'MAHIDA_WEB_UMUM_V2';
+const MAHIDA_PUBLIC_APP_VERSION = 'MAHIDA_WEB_UMUM_V2_1';
 
 const MAHIDA_PUBLIC_STORAGE = {
   EMAIL: 'mahida_public_email',
@@ -45,6 +45,7 @@ const MAHIDA_QR_SCAN_ACK_TYPE =
 
 let publicBridgeReady_ = false;
 let publicBridgeOrigin_ = '';
+let publicBridgeWindow_ = null;
 let publicBridgeInitStarted_ = false;
 const publicBridgePending_ = new Map();
 
@@ -494,6 +495,24 @@ function renderHomeMenu_() {
    PUBLIC BRIDGE
    ========================================================= */
 
+function isTrustedPublicBridgeOrigin_(origin) {
+  try {
+    const url = new URL(String(origin || ''));
+    const hostname = String(url.hostname || '').toLowerCase();
+
+    return (
+      url.protocol === 'https:' &&
+      (
+        hostname === 'script.google.com' ||
+        hostname.endsWith('script.googleusercontent.com')
+      )
+    );
+  } catch (error) {
+    return false;
+  }
+}
+
+
 function initPublicBridge_() {
   const frame = byId_('publicBridgeFrame');
 
@@ -504,6 +523,7 @@ function initPublicBridge_() {
   publicBridgeInitStarted_ = true;
   publicBridgeReady_ = false;
   publicBridgeOrigin_ = '';
+  publicBridgeWindow_ = null;
 
   window.addEventListener('message', handlePublicBridgeMessage_);
 
@@ -515,19 +535,27 @@ function initPublicBridge_() {
 
 
 function handlePublicBridgeMessage_(event) {
-  const frame = byId_('publicBridgeFrame');
-
-  if (!frame || event.source !== frame.contentWindow) {
-    return;
-  }
-
   const message = event.data;
 
   if (!message || typeof message !== 'object') {
     return;
   }
 
+  /*
+   * HtmlService memakai iframe sandbox internal Google.
+   * READY bisa datang dari child frame googleusercontent, bukan
+   * langsung dari publicBridgeFrame.contentWindow.
+   */
   if (message.type === MAHIDA_PUBLIC_BRIDGE_READY) {
+    if (!isTrustedPublicBridgeOrigin_(event.origin)) {
+      return;
+    }
+
+    if (!event.source || typeof event.source.postMessage !== 'function') {
+      return;
+    }
+
+    publicBridgeWindow_ = event.source;
     publicBridgeOrigin_ = String(event.origin || '');
     publicBridgeReady_ = true;
     return;
@@ -537,7 +565,11 @@ function handlePublicBridgeMessage_(event) {
     return;
   }
 
-  if (publicBridgeOrigin_ && event.origin !== publicBridgeOrigin_) {
+  if (
+    !publicBridgeWindow_ ||
+    event.source !== publicBridgeWindow_ ||
+    event.origin !== publicBridgeOrigin_
+  ) {
     return;
   }
 
@@ -569,7 +601,11 @@ function handlePublicBridgeMessage_(event) {
 
 
 function waitForPublicBridgeReady_() {
-  if (publicBridgeReady_) {
+  if (
+    publicBridgeReady_ &&
+    publicBridgeWindow_ &&
+    publicBridgeOrigin_
+  ) {
     return Promise.resolve();
   }
 
@@ -579,7 +615,11 @@ function waitForPublicBridgeReady_() {
     const startedAt = Date.now();
 
     const timer = window.setInterval(function () {
-      if (publicBridgeReady_) {
+      if (
+        publicBridgeReady_ &&
+        publicBridgeWindow_ &&
+        publicBridgeOrigin_
+      ) {
         window.clearInterval(timer);
         resolve();
         return;
@@ -601,8 +641,10 @@ function waitForPublicBridgeReady_() {
 async function publicBridgeRequest_(action, payload) {
   await waitForPublicBridgeReady_();
 
-  const frame = byId_('publicBridgeFrame');
-  if (!frame || !frame.contentWindow) {
+  if (
+    !publicBridgeWindow_ ||
+    !publicBridgeOrigin_
+  ) {
     throw new Error('Public Bridge Mahida tidak tersedia.');
   }
 
@@ -624,14 +666,14 @@ async function publicBridgeRequest_(action, payload) {
       timeoutId: timeoutId
     });
 
-    frame.contentWindow.postMessage(
+    publicBridgeWindow_.postMessage(
       {
         type: MAHIDA_PUBLIC_BRIDGE_REQUEST,
         requestId: requestId,
         action: action,
         payload: payload || {}
       },
-      publicBridgeOrigin_ || '*'
+      publicBridgeOrigin_
     );
   });
 }
