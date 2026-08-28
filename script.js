@@ -11,10 +11,35 @@ const MAHIDA_PUBLIC_STORAGE = {
 };
 
 const SPLASH_DURATION_MS = 1400;
-const MAHIDA_PUBLIC_API_URL =
+const MAHIDA_PUBLIC_BRIDGE_URL =
   'https://script.google.com/macros/s/AKfycbzzm1txakGC5DQTidoQr3UdPNi4k9y8YDn9UNokKXhmJ6Lj9xyPseKd2kaJ2nL_qU2KEw/exec';
 
 
+const MAHIDA_PUBLIC_BRIDGE_REQUEST =
+  'MAHIDA_PUBLIC_BRIDGE_REQUEST_V1';
+
+const MAHIDA_PUBLIC_BRIDGE_RESPONSE =
+  'MAHIDA_PUBLIC_BRIDGE_RESPONSE_V1';
+
+const MAHIDA_PUBLIC_BRIDGE_READY =
+  'MAHIDA_PUBLIC_BRIDGE_READY_V1';
+
+
+const PUBLIC_BRIDGE_READY_TIMEOUT_MS =
+  10000;
+
+const PUBLIC_BRIDGE_REQUEST_TIMEOUT_MS =
+  20000;
+
+
+let publicBridgeReady_ =
+  false;
+
+let publicBridgeOrigin_ =
+  '';
+
+const publicBridgePending_ =
+  new Map();
 const STOCK_REFRESH_INTERVAL_MS =
   15000;
 
@@ -69,6 +94,11 @@ const currentUserEmail =
 const homeMenu =
   document.getElementById(
     'homeMenu'
+  );
+
+const publicBridgeFrame =
+  document.getElementById(
+    'publicBridgeFrame'
   );
 
 const stockScreen =
@@ -130,6 +160,10 @@ document.addEventListener(
     restoreSavedEmail_();
 
     renderHomeMenu_();
+
+   initPublicBridge_();
+
+   ensureDeviceId_();
 
     window.setTimeout(
       function () {
@@ -611,6 +645,332 @@ function handleMenuClick_(
 }
 
 /* =========================================================
+   PUBLIC BRIDGE
+   ========================================================= */
+
+function initPublicBridge_() {
+
+  if (
+    !publicBridgeFrame
+  ) {
+    return;
+  }
+
+  /*
+   * Listener dipasang sebelum iframe dimuat
+   * supaya pesan READY tidak terlewat.
+   */
+  window.addEventListener(
+    'message',
+    handlePublicBridgeMessage_
+  );
+
+  publicBridgeReady_ =
+    false;
+
+  publicBridgeOrigin_ =
+    '';
+
+  publicBridgeFrame.src =
+    MAHIDA_PUBLIC_BRIDGE_URL +
+    '?page=public-bridge';
+}
+
+
+function handlePublicBridgeMessage_(
+  event
+) {
+
+  /*
+   * Pesan wajib berasal tepat dari
+   * iframe Bridge yang kita buat.
+   */
+  if (
+    !publicBridgeFrame ||
+    event.source !==
+      publicBridgeFrame.contentWindow
+  ) {
+    return;
+  }
+
+
+  const message =
+    event.data;
+
+
+  if (
+    !message ||
+    typeof message !==
+      'object'
+  ) {
+    return;
+  }
+
+
+  /*
+   * Bridge memberi tahu bahwa
+   * google.script.run sudah siap.
+   */
+  if (
+    message.type ===
+    MAHIDA_PUBLIC_BRIDGE_READY
+  ) {
+
+    publicBridgeOrigin_ =
+      String(
+        event.origin || ''
+      );
+
+    publicBridgeReady_ =
+      true;
+
+    return;
+  }
+
+
+  if (
+    message.type !==
+    MAHIDA_PUBLIC_BRIDGE_RESPONSE
+  ) {
+    return;
+  }
+
+
+  const requestId =
+    String(
+      message.requestId || ''
+    );
+
+
+  const pending =
+    publicBridgePending_
+      .get(
+        requestId
+      );
+
+
+  if (
+    !pending
+  ) {
+    return;
+  }
+
+
+  window.clearTimeout(
+    pending.timeoutId
+  );
+
+
+  publicBridgePending_
+    .delete(
+      requestId
+    );
+
+
+  pending.resolve(
+    message.response || {
+      ok: false,
+
+      error: {
+        code:
+          'EMPTY_BRIDGE_RESPONSE',
+
+        message:
+          'Bridge Mahida tidak mengirim data.'
+      }
+    }
+  );
+}
+
+
+function waitForPublicBridge_() {
+
+  if (
+    publicBridgeReady_ &&
+    publicBridgeOrigin_
+  ) {
+
+    return Promise.resolve();
+  }
+
+
+  return new Promise(
+    function (
+      resolve,
+      reject
+    ) {
+
+      const startedAt =
+        Date.now();
+
+
+      const timer =
+        window.setInterval(
+          function () {
+
+            if (
+              publicBridgeReady_ &&
+              publicBridgeOrigin_
+            ) {
+
+              window.clearInterval(
+                timer
+              );
+
+              resolve();
+
+              return;
+            }
+
+
+            if (
+              Date.now() -
+              startedAt >=
+              PUBLIC_BRIDGE_READY_TIMEOUT_MS
+            ) {
+
+              window.clearInterval(
+                timer
+              );
+
+              reject(
+                new Error(
+                  'Koneksi ke server Mahida belum siap.'
+                )
+              );
+            }
+
+          },
+          100
+        );
+    }
+  );
+}
+
+
+async function publicBridgeRequest_(
+  action,
+  payload
+) {
+
+  await waitForPublicBridge_();
+
+
+  if (
+    !publicBridgeFrame ||
+    !publicBridgeFrame.contentWindow
+  ) {
+
+    throw new Error(
+      'Bridge Mahida tidak tersedia.'
+    );
+  }
+
+
+  const requestId =
+    createPublicBridgeRequestId_();
+
+
+  return new Promise(
+    function (
+      resolve,
+      reject
+    ) {
+
+      const timeoutId =
+        window.setTimeout(
+          function () {
+
+            publicBridgePending_
+              .delete(
+                requestId
+              );
+
+
+            reject(
+              new Error(
+                'Server Mahida terlalu lama merespons.'
+              )
+            );
+
+          },
+          PUBLIC_BRIDGE_REQUEST_TIMEOUT_MS
+        );
+
+
+      publicBridgePending_
+        .set(
+          requestId,
+          {
+            resolve:
+              resolve,
+
+            reject:
+              reject,
+
+            timeoutId:
+              timeoutId
+          }
+        );
+
+
+      publicBridgeFrame
+        .contentWindow
+        .postMessage(
+          {
+            type:
+              MAHIDA_PUBLIC_BRIDGE_REQUEST,
+
+            requestId:
+              requestId,
+
+            action:
+              String(
+                action || ''
+              ),
+
+            payload:
+              payload || {}
+          },
+
+          /*
+           * Origin sebenarnya didapat langsung
+           * dari pesan READY iframe setelah
+           * redirect Apps Script selesai.
+           */
+          publicBridgeOrigin_
+        );
+    }
+  );
+}
+
+
+function createPublicBridgeRequestId_() {
+
+  if (
+    window.crypto &&
+    typeof window.crypto.randomUUID ===
+      'function'
+  ) {
+
+    return (
+      'REQ-' +
+      window.crypto.randomUUID()
+    );
+  }
+
+
+  return (
+    'REQ-' +
+    Date.now() +
+    '-' +
+    Math.random()
+      .toString(36)
+      .slice(2)
+  );
+}
+
+/* =========================================================
    PERSEDIAAN
    ========================================================= */
 
@@ -744,49 +1104,11 @@ async function loadPublicStock_(
 
   try {
 
-    /*
-     * Content-Type text/plain sengaja dipakai.
-     *
-     * Ini membuat request dari GitHub Pages
-     * tetap sederhana dan tidak membutuhkan
-     * preflight CORS khusus.
-     */
-    const response =
-      await fetch(
-        MAHIDA_PUBLIC_API_URL,
-        {
-          method:
-            'POST',
-
-          headers: {
-            'Content-Type':
-              'text/plain;charset=UTF-8'
-          },
-
-          body:
-            JSON.stringify(
-              {
-                action:
-                  'public.stock.list'
-              }
-            )
-        }
+       const payload =
+      await publicBridgeRequest_(
+        'public.stock.list',
+        {}
       );
-
-
-    if (
-      !response.ok
-    ) {
-
-      throw new Error(
-        'Server Mahida tidak dapat dihubungi.'
-      );
-    }
-
-
-    const payload =
-      await response.json();
-
 
     if (
       payload.ok !==
