@@ -11,41 +11,94 @@
 
   <title>Koperasi Mahida</title>
 
-  <link rel="icon" type="image/png" href="favicon.png?v=1">
-  <link rel="apple-touch-icon" href="favicon.png?v=1">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="icon" type="image/png" href="favicon.png?v=2">
+  <link rel="apple-touch-icon" href="favicon.png?v=2">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 
 <body>
 
   <!-- =====================================================
-       SPLASH 3D — 5 DETIK
+       SPLASH ORBIT 3D - 5 DETIK
        ===================================================== -->
   <section
     id="splashScreen"
     class="screen splash-screen"
     aria-label="Membuka Koperasi Mahida"
   >
-    <div class="splash-glow splash-glow-one" aria-hidden="true"></div>
-    <div class="splash-glow splash-glow-two" aria-hidden="true"></div>
+    <div class="splash-ambient splash-ambient-one" aria-hidden="true"></div>
+    <div class="splash-ambient splash-ambient-two" aria-hidden="true"></div>
+    <div class="splash-noise" aria-hidden="true"></div>
 
     <div class="splash-content">
       <div class="splash-stage" aria-hidden="true">
-        <!-- Kaca pembesar + globe bersifat statis. -->
+
+        <!-- Isi lensa dibuat terpisah agar semua logo selalu berada
+             di dalam kaca pembesar. -->
+        <div class="splash-lens-window">
+          <div class="splash-lens-depth"></div>
+
+          <svg
+            class="splash-globe"
+            viewBox="0 0 240 240"
+            role="presentation"
+            focusable="false"
+          >
+            <g class="splash-globe-grid">
+              <circle cx="120" cy="120" r="86" />
+              <ellipse cx="120" cy="120" rx="43" ry="86" />
+              <ellipse cx="120" cy="120" rx="72" ry="86" />
+              <path d="M34 120 H206" />
+              <path d="M48 82 C84 99 156 99 192 82" />
+              <path d="M48 158 C84 141 156 141 192 158" />
+              <path d="M120 34 V206" />
+            </g>
+          </svg>
+
+          <div class="splash-orbit-ring splash-orbit-ring-a"></div>
+          <div class="splash-orbit-ring splash-orbit-ring-b"></div>
+          <span class="splash-orbit-dot splash-orbit-dot-a"></span>
+          <span class="splash-orbit-dot splash-orbit-dot-b"></span>
+
+          <img
+            class="splash-orbit-logo splash-orbit-logo-pondok"
+            src="assets/logo-pondok.png?v=2"
+            alt=""
+            draggable="false"
+          >
+
+          <img
+            class="splash-orbit-logo splash-orbit-logo-koperasi"
+            src="assets/logo-koperasi.png?v=2"
+            alt=""
+            draggable="false"
+          >
+
+          <div class="splash-lens-reflection"></div>
+        </div>
+
+        <!-- Ring dan gagang berada di atas isi lensa sehingga logo tidak
+             pernah terlihat keluar dari kaca pembesar. -->
         <svg
-          class="splash-search-symbol"
+          class="splash-magnifier"
           viewBox="0 0 360 360"
           role="presentation"
           focusable="false"
         >
           <defs>
-            <linearGradient id="mahidaSearchStroke" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#d9ecff" />
-              <stop offset="48%" stop-color="#93c5fd" />
-              <stop offset="100%" stop-color="#35d1c5" />
+            <linearGradient id="mahidaRimStrokeV2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#d8efff" />
+              <stop offset="36%" stop-color="#82c5ff" />
+              <stop offset="72%" stop-color="#39d8cf" />
+              <stop offset="100%" stop-color="#1688d5" />
             </linearGradient>
-            <filter id="mahidaSearchGlow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
+            <linearGradient id="mahidaHandleStrokeV2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#8fd7ff" />
+              <stop offset="55%" stop-color="#3cccd0" />
+              <stop offset="100%" stop-color="#1479c8" />
+            </linearGradient>
+            <filter id="mahidaRimGlowV2" x="-35%" y="-35%" width="170%" height="170%">
+              <feGaussianBlur stdDeviation="4.5" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
@@ -53,40 +106,40 @@
             </filter>
           </defs>
 
-          <g class="splash-search-glow-stroke" filter="url(#mahidaSearchGlow)">
-            <circle cx="160" cy="154" r="112" />
-            <path d="M242 232 L322 312" />
-          </g>
+          <circle
+            class="splash-magnifier-glow"
+            cx="160"
+            cy="154"
+            r="116"
+            filter="url(#mahidaRimGlowV2)"
+          />
+          <path
+            class="splash-magnifier-handle-glow"
+            d="M244 238 L324 318"
+            filter="url(#mahidaRimGlowV2)"
+          />
 
-          <g class="splash-search-main-stroke">
-            <circle cx="160" cy="154" r="112" />
-            <path d="M242 232 L322 312" />
-          </g>
-
-          <g class="splash-globe-lines">
-            <circle cx="160" cy="154" r="79" />
-            <ellipse cx="160" cy="154" rx="38" ry="79" />
-            <path d="M82 154 H238" />
-            <path d="M94 119 C128 136 192 136 226 119" />
-            <path d="M94 189 C128 172 192 172 226 189" />
-            <path d="M160 75 V233" />
-          </g>
+          <circle
+            class="splash-magnifier-rim"
+            cx="160"
+            cy="154"
+            r="116"
+          />
+          <circle
+            class="splash-magnifier-rim-inner"
+            cx="160"
+            cy="154"
+            r="107"
+          />
+          <path
+            class="splash-magnifier-handle"
+            d="M244 238 L324 318"
+          />
+          <path
+            class="splash-magnifier-handle-highlight"
+            d="M250 244 L316 310"
+          />
         </svg>
-
-        <!-- Dua logo mengorbit pada jalur yang sama, beda fase 180°. -->
-        <img
-          class="splash-orbit-logo splash-orbit-logo-pondok"
-          src="assets/logo-pondok.png"
-          alt=""
-          draggable="false"
-        >
-
-        <img
-          class="splash-orbit-logo splash-orbit-logo-koperasi"
-          src="assets/logo-koperasi.png"
-          alt=""
-          draggable="false"
-        >
       </div>
 
       <div class="splash-copy">
@@ -490,6 +543,6 @@
     hidden
   ></iframe>
 
-  <script src="script.js?v=9"></script>
+  <script src="script.js?v=10"></script>
 </body>
 </html>
