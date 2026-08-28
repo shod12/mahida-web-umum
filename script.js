@@ -4,7 +4,7 @@
    MAHIDA WEB UMUM V2 FINAL
    ========================================================= */
 
-const MAHIDA_PUBLIC_APP_VERSION = 'MAHIDA_WEB_UMUM_V2_2_SPLASH';
+const MAHIDA_PUBLIC_APP_VERSION = 'MAHIDA_WEB_UMUM_V2_3_SPLASH_ORBIT';
 
 const MAHIDA_PUBLIC_STORAGE = {
   EMAIL: 'mahida_public_email',
