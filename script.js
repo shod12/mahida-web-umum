@@ -4,7 +4,7 @@
    MAHIDA WEB UMUM V2 FINAL
    ========================================================= */
 
-const MAHIDA_PUBLIC_APP_VERSION = 'MAHIDA_WEB_UMUM_V2_1';
+const MAHIDA_PUBLIC_APP_VERSION = 'MAHIDA_WEB_UMUM_V2_2_SPLASH';
 
 const MAHIDA_PUBLIC_STORAGE = {
   EMAIL: 'mahida_public_email',
@@ -12,7 +12,8 @@ const MAHIDA_PUBLIC_STORAGE = {
   LAST_DRAFT: 'mahida_public_last_draft_v2'
 };
 
-const SPLASH_DURATION_MS = 1200;
+const SPLASH_DURATION_MS = 5000;
+const SPLASH_EXIT_DURATION_MS = 520;
 const STOCK_REFRESH_INTERVAL_MS = 15000;
 const DRAFT_STATUS_POLL_MS = 8000;
 
@@ -145,10 +146,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.addEventListener('message', handleExternalQrMessage_);
 
+  startSplashSequence_();
+});
+
+
+/**
+ * Splash Web Umum.
+ * Total waktu layar awal tepat 5 detik, termasuk fade-out.
+ * Bridge tetap diinisialisasi di belakang splash agar koneksi sudah hangat
+ * ketika pengguna masuk ke halaman welcome.
+ */
+function startSplashSequence_() {
+  const splash = byId_('splashScreen');
+
+  if (!splash) {
+    showWelcomeScreen_();
+    return;
+  }
+
+  const exitAt = Math.max(
+    0,
+    SPLASH_DURATION_MS - SPLASH_EXIT_DURATION_MS
+  );
+
+  window.setTimeout(function () {
+    splash.classList.add('is-exiting');
+    splash.setAttribute('aria-hidden', 'true');
+  }, exitAt);
+
   window.setTimeout(function () {
     showWelcomeScreen_();
   }, SPLASH_DURATION_MS);
-});
+}
 
 
 function bindUiEvents_() {
