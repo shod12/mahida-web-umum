@@ -96,7 +96,7 @@ button {
 
 
 /* =========================================================
-   SPLASH SCREEN — 3D ORBIT / 5 DETIK
+   SPLASH SCREEN - ORBIT 3D DI DALAM KACA PEMBESAR
    ========================================================= */
 
 .splash-screen {
@@ -111,9 +111,9 @@ button {
   min-height: 100dvh;
 
   padding:
-    max(26px, env(safe-area-inset-top))
+    max(24px, env(safe-area-inset-top))
     18px
-    max(26px, env(safe-area-inset-bottom));
+    max(24px, env(safe-area-inset-bottom));
 
   overflow: hidden;
 
@@ -121,20 +121,25 @@ button {
 
   background:
     radial-gradient(
-      circle at 50% 34%,
-      rgba(57, 193, 183, .18),
-      transparent 30rem
+      circle at 50% 35%,
+      rgba(22, 188, 213, .16),
+      transparent 27rem
     ),
     radial-gradient(
-      circle at 10% 12%,
-      rgba(113, 178, 255, .16),
-      transparent 23rem
+      circle at 18% 18%,
+      rgba(60, 130, 210, .14),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at 82% 78%,
+      rgba(18, 159, 139, .10),
+      transparent 25rem
     ),
     linear-gradient(
-      155deg,
-      #071d30 0%,
-      #0b3450 46%,
-      #0a4a5a 100%
+      150deg,
+      #06192b 0%,
+      #092d49 47%,
+      #074354 100%
     );
 
   opacity: 1;
@@ -152,37 +157,58 @@ button {
     forwards;
 }
 
-.splash-glow {
+.splash-ambient {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(2px);
 }
 
-.splash-glow-one {
-  width: min(72vw, 560px);
-  height: min(72vw, 560px);
-  top: -26%;
-  right: -24%;
+.splash-ambient-one {
+  width: min(78vw, 620px);
+  height: min(78vw, 620px);
+  top: -30%;
+  right: -26%;
+
   background:
     radial-gradient(
       circle,
-      rgba(38, 194, 174, .17),
-      rgba(38, 194, 174, 0) 69%
+      rgba(34, 211, 190, .14),
+      rgba(34, 211, 190, 0) 68%
     );
 }
 
-.splash-glow-two {
-  width: min(64vw, 500px);
-  height: min(64vw, 500px);
-  left: -24%;
+.splash-ambient-two {
+  width: min(68vw, 540px);
+  height: min(68vw, 540px);
+  left: -28%;
   bottom: -28%;
+
   background:
     radial-gradient(
       circle,
-      rgba(69, 142, 221, .17),
-      rgba(69, 142, 221, 0) 70%
+      rgba(59, 130, 246, .14),
+      rgba(59, 130, 246, 0) 70%
     );
+}
+
+.splash-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  opacity: .17;
+
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(255,255,255,.38) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 74% 16%, rgba(138,226,255,.34) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 86% 68%, rgba(95,235,218,.28) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 32% 78%, rgba(255,255,255,.24) 0 1px, transparent 1.4px);
+
+  background-size:
+    150px 150px,
+    190px 190px,
+    210px 210px,
+    170px 170px;
 }
 
 .splash-content {
@@ -193,92 +219,205 @@ button {
   flex-direction: column;
   align-items: center;
 
-  width: min(100%, 560px);
+  width: min(100%, 620px);
 
   text-align: center;
 
   animation:
     mahidaSplashContentEnter
-    .58s
+    .62s
     cubic-bezier(.2, .75, .25, 1)
     both;
 }
 
 .splash-stage {
-  --orbit-x-front: clamp(92px, 24vw, 136px);
-  --orbit-x-front-mid: clamp(62px, 16vw, 92px);
-  --orbit-x-back-mid: clamp(-92px, -16vw, -62px);
-  --orbit-x-back: clamp(-136px, -24vw, -92px);
-
-  --orbit-y-front: clamp(18px, 4.6vw, 28px);
-  --orbit-y-low: clamp(28px, 7vw, 42px);
-  --orbit-y-low-mid: clamp(31px, 7.8vw, 47px);
-  --orbit-y-back: clamp(-30px, -5.1vw, -20px);
-  --orbit-y-high: clamp(-47px, -7.8vw, -31px);
-  --orbit-y-high-mid: clamp(-42px, -7vw, -28px);
-  --orbit-y-near: clamp(-20px, -3.2vw, -12px);
-
   position: relative;
 
-  width: min(82vw, 410px);
+  width: min(88vw, 440px);
   aspect-ratio: 1 / 1;
 
-  perspective: 860px;
+  perspective: 1000px;
   transform-style: preserve-3d;
-
   isolation: isolate;
 }
 
-.splash-search-symbol {
+/* Lens coordinates follow the SVG circle:
+   center 160/154, radius 116 in viewBox 360. */
+.splash-lens-window {
   position: absolute;
-  inset: 0;
   z-index: 2;
 
-  width: 100%;
-  height: 100%;
+  left: 12.22%;
+  top: 10.56%;
 
-  overflow: visible;
+  width: 64.44%;
+  aspect-ratio: 1 / 1;
 
-  filter:
-    drop-shadow(0 18px 28px rgba(0, 0, 0, .18));
+  overflow: hidden;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(25, 102, 131, .34),
+      rgba(5, 31, 52, .84) 72%,
+      rgba(3, 24, 42, .96) 100%
+    );
+
+  box-shadow:
+    inset 0 0 0 1px rgba(219, 242, 255, .08),
+    inset 0 0 48px rgba(18, 192, 211, .08),
+    0 0 36px rgba(31, 176, 210, .10);
+
+  transform-style: preserve-3d;
 }
 
-.splash-search-glow-stroke,
-.splash-search-main-stroke {
+.splash-lens-depth {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 68% 26%,
+      rgba(255,255,255,.08),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 44% 56%,
+      rgba(26, 179, 206, .10),
+      transparent 48%
+    );
+}
+
+.splash-globe {
+  position: absolute;
+  z-index: 4;
+
+  inset: 9%;
+  width: 82%;
+  height: 82%;
+
+  opacity: .58;
+
+  filter:
+    drop-shadow(0 0 12px rgba(127, 216, 255, .14));
+}
+
+.splash-globe-grid {
   fill: none;
+  stroke: rgba(207, 235, 255, .72);
+  stroke-width: 3.15;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.splash-search-glow-stroke {
-  stroke: rgba(42, 162, 217, .30);
-  stroke-width: 18;
-  opacity: .55;
+.splash-orbit-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+
+  width: 88%;
+  height: 34%;
+
+  border: 1.5px solid rgba(59, 220, 244, .42);
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 12px rgba(24, 211, 230, .20),
+    inset 0 0 10px rgba(75, 220, 255, .07);
+
+  transform-origin: center;
+  pointer-events: none;
 }
 
-.splash-search-main-stroke {
-  stroke: url(#mahidaSearchStroke);
-  stroke-width: 10;
-  opacity: .96;
+.splash-orbit-ring-a {
+  transform:
+    translate(-50%, -50%)
+    rotate(10deg);
+
+  animation:
+    mahidaOrbitRingPulse
+    2.3s
+    ease-in-out
+    infinite;
 }
 
-.splash-globe-lines {
-  fill: none;
-  stroke: rgba(220, 239, 255, .70);
-  stroke-width: 4.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.splash-orbit-ring-b {
+  width: 84%;
+  height: 30%;
 
-  filter:
-    drop-shadow(0 0 8px rgba(147, 197, 253, .12));
+  opacity: .42;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(-18deg)
+    scaleY(.74);
+
+  animation:
+    mahidaOrbitRingPulseAlt
+    2.7s
+    ease-in-out
+    infinite;
+}
+
+.splash-orbit-dot {
+  position: absolute;
+  z-index: 3;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #8df6ff;
+
+  box-shadow:
+    0 0 6px #8df6ff,
+    0 0 15px rgba(87, 224, 255, .95),
+    0 0 25px rgba(34, 211, 238, .48);
+
+  pointer-events: none;
+}
+
+.splash-orbit-dot-a {
+  left: 14%;
+  top: 48%;
+
+  animation:
+    mahidaOrbitDotGlow
+    1.65s
+    ease-in-out
+    infinite;
+}
+
+.splash-orbit-dot-b {
+  right: 12%;
+  top: 56%;
+
+  animation:
+    mahidaOrbitDotGlow
+    1.65s
+    ease-in-out
+    .7s
+    infinite;
 }
 
 .splash-orbit-logo {
-  position: absolute;
-  top: 43%;
-  left: 44%;
+  --orbit-front-x: 24%;
+  --orbit-front-y: 12%;
+  --orbit-side-x: 16%;
+  --orbit-side-y: 22%;
+  --orbit-back-x: -24%;
+  --orbit-back-y: -12%;
 
-  width: clamp(92px, 24vw, 142px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
   height: auto;
 
   object-fit: contain;
@@ -295,35 +434,114 @@ button {
     opacity;
 
   animation:
-    mahidaLogoOrbit3d
-    4.15s
+    mahidaLogoOrbitInsideLens
+    4.25s
     linear
-    .18s
+    .08s
     infinite;
 }
 
 .splash-orbit-logo-pondok {
-  width: clamp(96px, 25vw, 148px);
+  width: 42%;
 
   filter:
-    drop-shadow(0 13px 19px rgba(0, 0, 0, .23));
+    drop-shadow(0 12px 18px rgba(0, 0, 0, .25));
 }
 
 .splash-orbit-logo-koperasi {
-  width: clamp(88px, 22vw, 132px);
+  width: 39%;
 
-  animation-delay: -1.895s;
+  animation-delay: -2.125s;
 
   filter:
-    drop-shadow(0 12px 20px rgba(0, 89, 255, .19));
+    drop-shadow(0 12px 18px rgba(0, 116, 255, .22));
+}
+
+.splash-lens-reflection {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      138deg,
+      rgba(255,255,255,.12) 0%,
+      rgba(255,255,255,.035) 26%,
+      transparent 44%,
+      transparent 100%
+    );
+
+  mix-blend-mode: screen;
+}
+
+.splash-magnifier {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(0 18px 28px rgba(0, 0, 0, .20));
+}
+
+.splash-magnifier-glow,
+.splash-magnifier-rim,
+.splash-magnifier-rim-inner,
+.splash-magnifier-handle-glow,
+.splash-magnifier-handle,
+.splash-magnifier-handle-highlight {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.splash-magnifier-glow {
+  stroke: rgba(31, 182, 226, .25);
+  stroke-width: 18;
+  opacity: .76;
+}
+
+.splash-magnifier-rim {
+  stroke: url(#mahidaRimStrokeV2);
+  stroke-width: 11;
+}
+
+.splash-magnifier-rim-inner {
+  stroke: rgba(211, 239, 255, .28);
+  stroke-width: 2.2;
+}
+
+.splash-magnifier-handle-glow {
+  stroke: rgba(22, 182, 215, .22);
+  stroke-width: 21;
+}
+
+.splash-magnifier-handle {
+  stroke: url(#mahidaHandleStrokeV2);
+  stroke-width: 13;
+}
+
+.splash-magnifier-handle-highlight {
+  stroke: rgba(222, 247, 255, .28);
+  stroke-width: 3.2;
 }
 
 .splash-copy {
   position: relative;
-  z-index: 5;
+  z-index: 12;
 
   width: 100%;
-  margin-top: -14px;
+  margin-top: -18px;
 
   opacity: 0;
   transform: translateY(8px);
@@ -332,7 +550,7 @@ button {
     mahidaSplashCopyEnter
     .55s
     ease
-    .36s
+    .38s
     forwards;
 }
 
@@ -341,20 +559,23 @@ button {
   align-items: center;
   justify-content: center;
 
-  min-height: 25px;
-  padding: 0 11px;
+  min-height: 26px;
+  padding: 0 12px;
 
   border:
     1px solid
-    rgba(255, 255, 255, .14);
+    rgba(194, 233, 255, .20);
 
   border-radius: 999px;
 
   color:
-    rgba(226, 245, 255, .86);
+    rgba(224, 243, 255, .89);
 
   background:
-    rgba(255, 255, 255, .06);
+    rgba(255, 255, 255, .055);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06);
 
   backdrop-filter: blur(9px);
   -webkit-backdrop-filter: blur(9px);
@@ -370,15 +591,18 @@ button {
   color: #ffffff;
 
   font-size:
-    clamp(29px, 8vw, 42px);
+    clamp(30px, 8vw, 44px);
 
   font-weight: 850;
   line-height: 1.05;
   letter-spacing: -.035em;
+
+  text-shadow:
+    0 10px 28px rgba(0,0,0,.14);
 }
 
 .splash-copy p {
-  max-width: 320px;
+  max-width: 340px;
 
   margin:
     10px
@@ -394,9 +618,9 @@ button {
 
 .splash-progress {
   position: relative;
-  z-index: 5;
+  z-index: 12;
 
-  width: min(180px, 52vw);
+  width: min(190px, 54vw);
   height: 3px;
 
   margin-top: 23px;
@@ -420,8 +644,8 @@ button {
   background:
     linear-gradient(
       90deg,
-      #8fc9ff,
-      #42e1cf,
+      #7cbfff,
+      #2ce4d2,
       #ffffff
     );
 
@@ -433,155 +657,177 @@ button {
 
   animation:
     mahidaSplashProgress
-    4.35s
+    4.45s
     linear
-    .25s
+    .18s
     forwards;
 }
 
-@keyframes mahidaLogoOrbit3d {
+@keyframes mahidaLogoOrbitInsideLens {
   0%,
   100% {
-    z-index: 5;
+    z-index: 7;
     opacity: 1;
     filter:
       blur(0)
-      saturate(1.06)
-      drop-shadow(0 16px 25px rgba(0, 0, 0, .24));
+      saturate(1.08)
+      brightness(1.04)
+      drop-shadow(0 15px 22px rgba(0, 0, 0, .25));
+
     transform:
       translate(-50%, -50%)
-      translate3d(
-        var(--orbit-x-front),
-        var(--orbit-y-front),
-        96px
-      )
-      scale(1.16);
+      translate3d(58%, 30%, 120px)
+      scale(1.15);
   }
 
   12.5% {
-    z-index: 5;
-    opacity: .95;
+    z-index: 7;
+    opacity: .96;
     filter:
       blur(0)
-      saturate(1.03)
-      drop-shadow(0 13px 22px rgba(0, 0, 0, .20));
+      saturate(1.05)
+      brightness(1.02)
+      drop-shadow(0 13px 20px rgba(0, 0, 0, .22));
+
     transform:
       translate(-50%, -50%)
-      translate3d(
-        var(--orbit-x-front-mid),
-        var(--orbit-y-low),
-        62px
-      )
-      scale(1.06);
+      translate3d(34%, 54%, 82px)
+      scale(1.05);
   }
 
   25% {
-    z-index: 4;
-    opacity: .82;
+    z-index: 6;
+    opacity: .84;
     filter:
       blur(.35px)
-      saturate(.96)
-      drop-shadow(0 9px 18px rgba(0, 0, 0, .16));
+      saturate(.98)
+      brightness(.98)
+      drop-shadow(0 10px 17px rgba(0, 0, 0, .17));
+
     transform:
       translate(-50%, -50%)
-      translate3d(
-        0,
-        var(--orbit-y-low-mid),
-        10px
-      )
+      translate3d(0, 62%, 18px)
       scale(.92);
   }
 
   37.5% {
-    z-index: 1;
-    opacity: .60;
+    z-index: 3;
+    opacity: .62;
     filter:
-      blur(1.25px)
-      saturate(.82)
-      drop-shadow(0 6px 14px rgba(0, 0, 0, .12));
+      blur(1.1px)
+      saturate(.84)
+      brightness(.88)
+      drop-shadow(0 7px 13px rgba(0, 0, 0, .13));
+
     transform:
       translate(-50%, -50%)
-      translate3d(
-        var(--orbit-x-back-mid),
-        var(--orbit-y-front),
-        -72px
-      )
-      scale(.76);
+      translate3d(-42%, 34%, -70px)
+      scale(.77);
   }
 
   50% {
-    z-index: 1;
+    z-index: 2;
     opacity: .46;
     filter:
-      blur(2.3px)
+      blur(2.25px)
       saturate(.72)
-      drop-shadow(0 4px 10px rgba(0, 0, 0, .10));
+      brightness(.78)
+      drop-shadow(0 5px 10px rgba(0, 0, 0, .10));
+
     transform:
       translate(-50%, -50%)
-      translate3d(
-        var(--orbit-x-back),
-        var(--orbit-y-back),
-        -120px
-      )
-      scale(.68);
+      translate3d(-58%, -18%, -125px)
+      scale(.67);
   }
 
   62.5% {
-    z-index: 1;
-    opacity: .56;
+    z-index: 2;
+    opacity: .55;
     filter:
-      blur(1.45px)
+      blur(1.5px)
       saturate(.80)
-      drop-shadow(0 5px 12px rgba(0, 0, 0, .11));
+      brightness(.84)
+      drop-shadow(0 5px 11px rgba(0, 0, 0, .11));
+
     transform:
       translate(-50%, -50%)
-      translate3d(
-        var(--orbit-x-back-mid),
-        var(--orbit-y-high-mid),
-        -78px
-      )
-      scale(.74);
+      translate3d(-35%, -54%, -82px)
+      scale(.73);
   }
 
   75% {
-    z-index: 2;
+    z-index: 4;
     opacity: .74;
     filter:
       blur(.7px)
       saturate(.90)
+      brightness(.92)
       drop-shadow(0 7px 14px rgba(0, 0, 0, .13));
+
     transform:
       translate(-50%, -50%)
-      translate3d(
-        0,
-        var(--orbit-y-high),
-        -8px
-      )
+      translate3d(0, -62%, -12px)
       scale(.84);
   }
 
   87.5% {
-    z-index: 4;
-    opacity: .91;
+    z-index: 6;
+    opacity: .92;
     filter:
       blur(.12px)
-      saturate(1)
-      drop-shadow(0 11px 19px rgba(0, 0, 0, .18));
+      saturate(1.01)
+      brightness(1)
+      drop-shadow(0 11px 18px rgba(0, 0, 0, .18));
+
     transform:
       translate(-50%, -50%)
-      translate3d(
-        var(--orbit-x-front-mid),
-        var(--orbit-y-near),
-        54px
-      )
+      translate3d(39%, -32%, 62px)
       scale(1.01);
+  }
+}
+
+@keyframes mahidaOrbitRingPulse {
+  0%, 100% {
+    opacity: .52;
+    box-shadow:
+      0 0 10px rgba(24, 211, 230, .14),
+      inset 0 0 8px rgba(75, 220, 255, .05);
+  }
+
+  50% {
+    opacity: .88;
+    box-shadow:
+      0 0 18px rgba(24, 211, 230, .28),
+      inset 0 0 12px rgba(75, 220, 255, .08);
+  }
+}
+
+@keyframes mahidaOrbitRingPulseAlt {
+  0%, 100% {
+    opacity: .24;
+  }
+
+  50% {
+    opacity: .54;
+  }
+}
+
+@keyframes mahidaOrbitDotGlow {
+  0%, 100% {
+    opacity: .42;
+    transform: scale(.72);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
   }
 }
 
 @keyframes mahidaSplashContentEnter {
   from {
     opacity: 0;
-    transform: translateY(10px) scale(.985);
+    transform: translateY(9px) scale(.985);
   }
 
   to {
@@ -616,54 +862,36 @@ button {
 
   to {
     opacity: 0;
-    transform: scale(1.025);
+    transform: scale(1.022);
     filter: blur(5px);
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 420px) {
   .splash-stage {
-    --orbit-x-front: 88px;
-    --orbit-x-front-mid: 60px;
-    --orbit-x-back-mid: -60px;
-    --orbit-x-back: -88px;
-    --orbit-y-front: 18px;
-    --orbit-y-low: 27px;
-    --orbit-y-low-mid: 31px;
-    --orbit-y-back: -20px;
-    --orbit-y-high: -31px;
-    --orbit-y-high-mid: -28px;
-    --orbit-y-near: -12px;
-    width: min(88vw, 340px);
-  }
-
-  .splash-orbit-logo-pondok {
-    width: 100px;
-  }
-
-  .splash-orbit-logo-koperasi {
-    width: 90px;
+    width: min(94vw, 390px);
   }
 
   .splash-copy {
-    margin-top: -10px;
+    margin-top: -22px;
+  }
+
+  .splash-copy h1 {
+    font-size: clamp(29px, 9vw, 38px);
   }
 }
 
-@media (min-width: 700px) {
+@media (max-height: 670px) {
   .splash-stage {
-    width: 430px;
-    --orbit-x-front: 142px;
-    --orbit-x-front-mid: 96px;
-    --orbit-x-back-mid: -96px;
-    --orbit-x-back: -142px;
-    --orbit-y-front: 29px;
-    --orbit-y-low: 44px;
-    --orbit-y-low-mid: 49px;
-    --orbit-y-back: -31px;
-    --orbit-y-high: -49px;
-    --orbit-y-high-mid: -44px;
-    --orbit-y-near: -21px;
+    width: min(68vh, 360px);
+  }
+
+  .splash-copy {
+    margin-top: -26px;
+  }
+
+  .splash-progress {
+    margin-top: 17px;
   }
 }
 
