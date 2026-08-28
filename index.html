@@ -2,100 +2,62 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
-
-  <meta
-    name="theme-color"
-    content="#0F3149"
-  >
+  <meta name="theme-color" content="#0F3149">
+  <meta name="color-scheme" content="light">
 
   <title>Koperasi Mahida</title>
 
-  <link
-  rel="stylesheet"
-  href="styles.css?v=2">
-  >
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 
 <body>
 
-  <!-- ==============================
-       SPLASH SCREEN
-       ============================== -->
-  <section
-    id="splashScreen"
-    class="screen splash-screen"
-  >
-
+  <!-- =====================================================
+       SPLASH
+       ===================================================== -->
+  <section id="splashScreen" class="screen splash-screen">
     <div class="splash-logo-group">
-
-      <div
-        class="logo-placeholder logo-pondok"
-        id="logoPondok"
-      >
+      <div class="logo-placeholder logo-pondok" id="logoPondok">
         LOGO PONDOK
       </div>
 
-      <div class="logo-divider">
-        ×
-      </div>
+      <div class="logo-divider">×</div>
 
-      <div
-        class="logo-placeholder logo-koperasi"
-        id="logoKoperasi"
-      >
+      <div class="logo-placeholder logo-koperasi" id="logoKoperasi">
         LOGO KOPERASI
       </div>
-
     </div>
 
     <div class="splash-brand">
       <h1>Koperasi Mahida</h1>
-
-      <p>
-        Membangun manfaat,
-        menebar keberkahan.
-      </p>
+      <p>Membangun manfaat, menebar keberkahan.</p>
     </div>
 
-    <div class="splash-loading">
+    <div class="splash-loading" aria-label="Memuat">
       <span></span>
       <span></span>
       <span></span>
     </div>
-
   </section>
 
 
-  <!-- ==============================
-       HALAMAN SELAMAT DATANG
-       ============================== -->
-  <main
-    id="welcomeScreen"
-    class="screen welcome-screen hidden"
-  >
-
+  <!-- =====================================================
+       WELCOME / EMAIL
+       ===================================================== -->
+  <main id="welcomeScreen" class="screen welcome-screen hidden">
     <div class="welcome-card">
-
       <div class="welcome-brand">
+        <span class="eyebrow">KOPERASI MAHIDA</span>
         <h1>Sugeng Rawuh 👋</h1>
-
-        <p>
-          Wonten ing layanan
-          Koperasi Mahida
-        </p>
+        <p>Wonten ing layanan Koperasi Mahida</p>
       </div>
 
       <div class="welcome-form">
-
-        <label for="userEmail">
-          Email
-        </label>
-
+        <label for="userEmail">Email</label>
         <input
           id="userEmail"
           type="email"
@@ -104,188 +66,374 @@
           placeholder="nama@email.com"
         >
 
-        <p
-          id="emailMessage"
-          class="form-message"
-        ></p>
+        <p id="emailMessage" class="form-message" role="alert"></p>
 
-        <button
-          id="continueButton"
-          type="button"
-        >
+        <button id="continueButton" type="button" class="primary-action">
           Mlebet
         </button>
-
       </div>
 
       <p class="welcome-note">
-        Email mung digunakake
-        kanggo nyathet transaksi
-        sing sampeyan kirim.
+        Email mung digunakake kanggo nyathet transaksi sing sampeyan kirim.
       </p>
-
     </div>
-
   </main>
 
 
-  <!-- ==============================
-       BERANDA
-       Akan kita isi pada tahap berikutnya
-       ============================== -->
-  <main
-    id="homeScreen"
-    class="screen home-screen hidden"
-  >
-
+  <!-- =====================================================
+       HOME
+       ===================================================== -->
+  <main id="homeScreen" class="screen home-screen hidden">
     <header class="home-header">
-
       <div>
-        <p class="home-greeting">
-          Sugeng rawuh
-        </p>
-
-        <strong
-          id="currentUserEmail"
-          class="home-email"
-        >
-          -
-        </strong>
+        <p class="home-greeting">Sugeng rawuh</p>
+        <strong id="currentUserEmail" class="home-email">-</strong>
       </div>
 
+      <button
+        id="changeEmailButton"
+        class="header-soft-button"
+        type="button"
+      >
+        Ganti email
+      </button>
     </header>
 
     <section class="home-content">
-
-      <h2>Layanan Mahida</h2>
-
-      <div
-        id="homeMenu"
-        class="home-menu"
-      >
-
-        <!-- Menu akan kita masukkan
-             pada tahap berikutnya. -->
-
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">LAYANAN UMUM</span>
+          <h2>Layanan Mahida</h2>
+        </div>
       </div>
 
-    </section>
+      <div id="homeMenu" class="home-menu"></div>
 
+      <div id="recentDraftCard" class="recent-draft-card hidden"></div>
+
+      <div class="home-note-card">
+        <strong>Harga yang ditampilkan</strong>
+        <p>
+          Persediaan, Scan Santri, lan Penjualan ing Web Umum iki nganggo
+          <b>Harga Santri</b>. Transaksi sing dikirim durung resmi nganti
+          disetujui Admin.
+        </p>
+      </div>
+    </section>
   </main>
 
-  <!-- ==============================
-     HALAMAN PERSEDIAAN
-     ============================== -->
-<main
-  id="stockScreen"
-  class="screen stock-screen hidden"
->
 
-  <header class="page-header">
+  <!-- =====================================================
+       PERSEDIAAN
+       ===================================================== -->
+  <main id="stockScreen" class="screen page-screen stock-screen hidden">
+    <header class="page-header">
+      <button id="stockBackButton" class="page-back-button" type="button" aria-label="Kembali">←</button>
 
-    <button
-      id="stockBackButton"
-      class="page-back-button"
-      type="button"
-      aria-label="Kembali"
-    >
-      ←
-    </button>
+      <div class="page-header-copy">
+        <h1>Persediaan</h1>
+        <p>Stok lan Harga Santri saiki</p>
+      </div>
 
-    <div class="page-header-copy">
-      <h1>Persediaan</h1>
+      <button id="stockRefreshButton" class="page-refresh-button" type="button" aria-label="Perbarui">↻</button>
+    </header>
 
-      <p>
-        Stok lan rega santri saiki
-      </p>
-    </div>
+    <section class="page-content stock-content">
+      <div class="stock-update-row">
+        <span>Diperbarui</span>
+        <strong id="stockUpdatedAt">-</strong>
+      </div>
 
-    <button
-      id="stockRefreshButton"
-      class="page-refresh-button"
-      type="button"
-    >
-      ↻
-    </button>
+      <div class="search-box">
+        <span class="search-icon">🔎</span>
+        <input
+          id="stockSearchInput"
+          type="search"
+          autocomplete="off"
+          placeholder="Cari kitab / barang..."
+        >
+      </div>
 
-  </header>
-
-
-  <section class="stock-content">
-
-    <div class="stock-update-row">
-
-      <span>
-        Diperbarui
-      </span>
-
-      <strong id="stockUpdatedAt">
-        -
-      </strong>
-
-    </div>
+      <div id="stockLoading" class="page-state">Memuat persediaan...</div>
+      <div id="stockError" class="page-state page-state-error hidden"></div>
+      <div id="stockEmpty" class="page-state hidden">Barang tidak ditemukan.</div>
+      <div id="stockList" class="stock-list"></div>
+    </section>
+  </main>
 
 
-    <div class="stock-search">
+  <!-- =====================================================
+       SCAN SANTRI
+       ===================================================== -->
+  <main id="scanScreen" class="screen page-screen transaction-screen hidden">
+    <header class="page-header">
+      <button id="scanBackButton" class="page-back-button" type="button" aria-label="Kembali">←</button>
 
-      <span class="stock-search-icon">
-        🔎
-      </span>
+      <div class="page-header-copy">
+        <h1>Scan Santri</h1>
+        <p>Scan siji, pilih barang, banjur kirim Draft</p>
+      </div>
 
-      <input
-        id="stockSearchInput"
-        type="search"
-        autocomplete="off"
-        placeholder="Cari kitab / barang..."
-      >
+      <span class="page-header-badge">QR</span>
+    </header>
 
-    </div>
+    <section class="page-content transaction-content">
+      <div class="info-banner">
+        <span class="info-banner-icon">🛡️</span>
+        <p>
+          QR mung diverifikasi kanggo ngenali Santri. Token QR lengkap ora
+          disimpen ing Draft.
+        </p>
+      </div>
+
+      <article id="scanStartCard" class="scan-start-card">
+        <div class="scan-start-icon">📷</div>
+        <div>
+          <span class="eyebrow">SCAN SATU</span>
+          <h2>Scan QR Santri</h2>
+          <p>Scanner Mahida bakal mbukak ing halaman anyar banjur bali otomatis yen sukses.</p>
+        </div>
+
+        <button id="startSantriScanButton" class="primary-action" type="button">
+          Buka Scanner
+        </button>
+
+        <p id="scanMessage" class="inline-message" role="status"></p>
+      </article>
+
+      <article id="scanIdentityCard" class="identity-card hidden">
+        <div class="identity-avatar">✓</div>
+        <div class="identity-main">
+          <span>Santri terverifikasi</span>
+          <h2 id="scanStudentName">-</h2>
+          <p>
+            <strong id="scanStudentId">-</strong>
+            <span>•</span>
+            <span id="scanStudentClass">-</span>
+          </p>
+        </div>
+        <button id="rescanSantriButton" class="soft-button" type="button">Scan ulang</button>
+      </article>
+
+      <div id="scanOrderArea" class="transaction-order-area hidden">
+        <div class="section-heading compact">
+          <div>
+            <span class="eyebrow">PILIH BARANG</span>
+            <h2>Kitab / Barang</h2>
+          </div>
+          <span class="price-mode-pill">Harga Santri</span>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon">🔎</span>
+          <input
+            id="scanProductSearch"
+            type="search"
+            autocomplete="off"
+            placeholder="Cari kitab / barang..."
+          >
+        </div>
+
+        <div id="scanProductState" class="mini-state hidden"></div>
+        <div id="scanProductList" class="product-picker-list"></div>
+
+        <section class="cart-card">
+          <div class="cart-heading">
+            <div>
+              <span class="eyebrow">KERANJANG</span>
+              <h2>Draft QR Santri</h2>
+            </div>
+            <span id="scanCartCount" class="cart-count">0 barang</span>
+          </div>
+
+          <div id="scanCartEmpty" class="cart-empty">Belum ada barang dipilih.</div>
+          <div id="scanCartList" class="cart-list"></div>
+
+          <div class="cart-total-row">
+            <span>Total</span>
+            <strong id="scanCartTotal">Rp0</strong>
+          </div>
+
+          <button id="submitScanDraftButton" class="primary-action" type="button" disabled>
+            Kirim ke Admin
+          </button>
+
+          <p class="transaction-footnote">
+            Belum mengurangi stok lan durung nggawe transaksi nganti Admin nyetujui.
+          </p>
+        </section>
+      </div>
+    </section>
+  </main>
 
 
-    <div
-      id="stockLoading"
-      class="stock-state"
-    >
-      Memuat persediaan...
-    </div>
+  <!-- =====================================================
+       PENJUALAN UMUM
+       ===================================================== -->
+  <main id="salesScreen" class="screen page-screen transaction-screen hidden">
+    <header class="page-header">
+      <button id="salesBackButton" class="page-back-button" type="button" aria-label="Kembali">←</button>
+
+      <div class="page-header-copy">
+        <h1>Penjualan</h1>
+        <p>Penjualan umum nganggo Harga Santri</p>
+      </div>
+
+      <span class="page-header-badge">🛒</span>
+    </header>
+
+    <section class="page-content transaction-content">
+      <div class="form-card public-sale-form-card">
+        <div class="form-field">
+          <label for="salesBuyerName">Nama Pembeli</label>
+          <input
+            id="salesBuyerName"
+            type="text"
+            autocomplete="name"
+            maxlength="120"
+            placeholder="Tulis nama pembeli"
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="salesPaymentMethod">Metode Pembayaran</label>
+          <select id="salesPaymentMethod">
+            <option value="Tunai">Tunai</option>
+            <option value="Transfer">Transfer</option>
+          </select>
+        </div>
+
+        <p class="field-help">
+          Transaksi resmi baru dibuat setelah Admin menyetujui Draft.
+        </p>
+      </div>
+
+      <div class="section-heading compact">
+        <div>
+          <span class="eyebrow">PILIH BARANG</span>
+          <h2>Kitab / Barang</h2>
+        </div>
+        <span class="price-mode-pill">Harga Santri</span>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">🔎</span>
+        <input
+          id="salesProductSearch"
+          type="search"
+          autocomplete="off"
+          placeholder="Cari kitab / barang..."
+        >
+      </div>
+
+      <div id="salesProductState" class="mini-state hidden"></div>
+      <div id="salesProductList" class="product-picker-list"></div>
+
+      <section class="cart-card">
+        <div class="cart-heading">
+          <div>
+            <span class="eyebrow">KERANJANG</span>
+            <h2>Draft Penjualan</h2>
+          </div>
+          <span id="salesCartCount" class="cart-count">0 barang</span>
+        </div>
+
+        <div id="salesCartEmpty" class="cart-empty">Belum ada barang dipilih.</div>
+        <div id="salesCartList" class="cart-list"></div>
+
+        <div class="cart-total-row">
+          <span>Total</span>
+          <strong id="salesCartTotal">Rp0</strong>
+        </div>
+
+        <button id="submitSalesDraftButton" class="primary-action" type="button" disabled>
+          Kirim ke Admin
+        </button>
+
+        <p id="salesDraftMessage" class="inline-message" role="status"></p>
+      </section>
+    </section>
+  </main>
 
 
-    <div
-      id="stockError"
-      class="stock-state stock-state-error hidden"
-    ></div>
+  <!-- =====================================================
+       STATUS DRAFT
+       ===================================================== -->
+  <main id="draftStatusScreen" class="screen page-screen draft-status-screen hidden">
+    <header class="page-header">
+      <button id="draftStatusBackButton" class="page-back-button" type="button" aria-label="Beranda">←</button>
+
+      <div class="page-header-copy">
+        <h1>Status Transaksi</h1>
+        <p id="draftStatusSubtitle">Menunggu keputusan Admin</p>
+      </div>
+
+      <button id="draftStatusRefreshButton" class="page-refresh-button" type="button" aria-label="Cek status">↻</button>
+    </header>
+
+    <section class="page-content draft-status-content">
+      <article id="draftStatusCard" class="draft-status-card waiting">
+        <div id="draftStatusIcon" class="draft-status-icon">⌛</div>
+        <span id="draftStatusLabel" class="draft-status-label">MENUNGGU PERSETUJUAN</span>
+        <h2 id="draftStatusTitle">Draft wis dikirim menyang Admin</h2>
+        <p id="draftStatusMessage">
+          Mangga ngenteni. Sistem bakal mriksa status kanthi otomatis.
+        </p>
+
+        <div class="draft-status-meta">
+          <div>
+            <span>ID Draft</span>
+            <strong id="draftStatusId">-</strong>
+          </div>
+          <div>
+            <span>Total Draft</span>
+            <strong id="draftStatusTotal">Rp0</strong>
+          </div>
+        </div>
+
+        <div id="draftDecisionInfo" class="draft-decision-info hidden"></div>
+
+        <button id="draftStatusHomeButton" class="primary-action" type="button">
+          Bali menyang Beranda
+        </button>
+      </article>
+
+      <article id="thankYouCard" class="thank-you-card hidden">
+        <div class="success-checkmark" aria-hidden="true">
+          <span>✓</span>
+        </div>
+
+        <span class="eyebrow">TRANSAKSI DISETUJUI</span>
+        <h2>Matur nuwun nggih 🤲</h2>
+        <p>
+          Wis tumbas ing Koperasi Mahida. Muga barangé migunani lan dadi berkah.
+          Ati-ati nggih, salam anget saka Koperasi Mahida.
+        </p>
+
+        <div class="thank-you-invoice">
+          <span>Invoice</span>
+          <strong id="thankYouInvoice">-</strong>
+        </div>
+
+        <button id="thankYouHomeButton" class="primary-action" type="button">
+          Bali menyang Beranda
+        </button>
+      </article>
+    </section>
+  </main>
 
 
-    <div
-      id="stockEmpty"
-      class="stock-state hidden"
-    >
-      Barang tidak ditemukan.
-    </div>
+  <!-- =====================================================
+       APPS SCRIPT PUBLIC BRIDGE
+       ===================================================== -->
+  <iframe
+    id="publicBridgeFrame"
+    title="Mahida Public Bridge"
+    aria-hidden="true"
+    tabindex="-1"
+    hidden
+  ></iframe>
 
-
-    <div
-      id="stockList"
-      class="stock-list"
-    ></div>
-
-  </section>
-
-</main>
-
-  <!-- ==============================
-     MAHIDA PUBLIC BRIDGE
-     Tidak terlihat oleh pengguna.
-     ============================== -->
-<iframe
-  id="publicBridgeFrame"
-  title="Mahida Public Bridge"
-  aria-hidden="true"
-  tabindex="-1"
-  hidden
-></iframe>
-  
-  <script src="script.js?v=4"></script>
-
+  <script src="script.js?v=7"></script>
 </body>
 </html>
