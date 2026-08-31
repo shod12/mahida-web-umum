@@ -1,0 +1,285 @@
+/* =========================================================
+   MAHIDA WEB UMUM — RUDDER MOBILE NAV V1
+   UI-only layer. Existing service screens and transaction logic stay intact.
+   ========================================================= */
+
+:root {
+  --rudder-height: 82px;
+  --rudder-safe: env(safe-area-inset-bottom, 0px);
+}
+
+/* Home gets extra bottom space so content never sits behind the rudder. */
+.home-screen {
+  min-height: 100dvh;
+  padding-bottom: calc(var(--rudder-height) + var(--rudder-safe) + 22px);
+}
+
+/* Existing injected card menu remains in DOM for compatibility but is no longer visual navigation. */
+#homeMenu {
+  display: none !important;
+}
+
+.home-header {
+  padding-bottom: 30px;
+}
+
+.home-header .home-greeting {
+  font-size: 12px;
+  letter-spacing: .02em;
+}
+
+.home-email {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 650;
+  opacity: .94;
+}
+
+.mahida-warm-welcome {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 18px;
+  padding: 20px 18px;
+  border: 1px solid rgba(14, 116, 112, .13);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(14, 116, 112, .11), transparent 42%),
+    linear-gradient(145deg, #ffffff, #f8fcfb);
+  box-shadow: var(--shadow-card);
+}
+
+.mahida-warm-welcome::after {
+  content: "";
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  right: -50px;
+  bottom: -62px;
+  border-radius: 50%;
+  background: rgba(15, 82, 127, .055);
+  pointer-events: none;
+}
+
+.mahida-warm-welcome .eyebrow {
+  margin-bottom: 7px;
+}
+
+.mahida-warm-welcome h2 {
+  margin: 0;
+  color: var(--mahida-navy);
+  font-size: 23px;
+  line-height: 1.22;
+  letter-spacing: -.02em;
+}
+
+.mahida-warm-welcome p {
+  max-width: 520px;
+  margin: 9px 0 0;
+  color: var(--mahida-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.mahida-quick-hint {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 12px 13px;
+  border-radius: 15px;
+  background: #edf8f6;
+  color: #24584f;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.mahida-quick-hint-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 11px;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--mahida-blue), var(--mahida-teal));
+}
+
+.mahida-install-card {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 0 18px;
+  padding: 14px 15px;
+  border: 1px solid #d6e6e0;
+  border-radius: 17px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(15, 49, 73, .055);
+}
+
+.mahida-install-card.is-visible {
+  display: flex;
+}
+
+.mahida-install-copy {
+  min-width: 0;
+}
+
+.mahida-install-copy strong,
+.mahida-install-copy small {
+  display: block;
+}
+
+.mahida-install-copy strong {
+  color: var(--mahida-navy);
+  font-size: 13px;
+}
+
+.mahida-install-copy small {
+  margin-top: 4px;
+  color: var(--mahida-muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.mahida-install-button {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 12px;
+  color: #ffffff;
+  background: var(--mahida-navy);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* =========================================================
+   RUDDER / BOTTOM NAV
+   ========================================================= */
+
+.mahida-rudder {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 80;
+  width: min(100%, 760px);
+  min-height: calc(var(--rudder-height) + var(--rudder-safe));
+  padding: 9px 18px calc(9px + var(--rudder-safe));
+  transform: translateX(-50%);
+  border-top: 1px solid rgba(203, 213, 225, .78);
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 -10px 30px rgba(15, 49, 73, .10);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.mahida-rudder-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.18fr 1fr;
+  align-items: end;
+  gap: 4px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.mahida-rudder-item {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  min-width: 0;
+  min-height: 58px;
+  padding: 5px 4px;
+  color: #74828f;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 760;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mahida-rudder-icon {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+}
+
+.mahida-rudder-icon svg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mahida-rudder-item:active {
+  transform: translateY(1px) scale(.98);
+}
+
+.mahida-rudder-scan {
+  position: relative;
+  justify-content: flex-end;
+  color: var(--mahida-navy);
+}
+
+.mahida-rudder-scan .mahida-rudder-icon {
+  width: 62px;
+  height: 62px;
+  margin-top: -30px;
+  border: 6px solid var(--mahida-bg);
+  border-radius: 50%;
+  color: #ffffff;
+  background: linear-gradient(145deg, var(--mahida-blue), var(--mahida-teal));
+  box-shadow:
+    0 12px 25px rgba(15, 82, 127, .24),
+    inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+.mahida-rudder-scan .mahida-rudder-icon svg {
+  width: 27px;
+  height: 27px;
+  stroke-width: 2;
+}
+
+.mahida-rudder-scan span:last-child {
+  margin-top: -1px;
+  color: var(--mahida-navy);
+  font-weight: 850;
+}
+
+/* Standalone app: use the whole viewport and respect Android/iOS safe areas. */
+@media (display-mode: standalone) {
+  html,
+  body {
+    min-height: 100dvh;
+  }
+
+  .home-header,
+  .page-header {
+    padding-top: max(18px, env(safe-area-inset-top));
+  }
+}
+
+@media (max-width: 420px) {
+  .home-content {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .mahida-warm-welcome {
+    padding: 18px 16px;
+  }
+
+  .mahida-rudder {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
