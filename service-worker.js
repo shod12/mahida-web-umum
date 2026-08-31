@@ -1,6 +1,6 @@
 'use strict';
 
-const MAHIDA_CACHE = 'mahida-web-umum-shell-v1';
+const MAHIDA_CACHE = 'mahida-web-umum-shell-v2';
 const MAHIDA_SHELL = [
   './',
   './index.html',
